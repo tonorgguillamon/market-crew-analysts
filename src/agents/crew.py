@@ -1,14 +1,10 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import SerperDevTool, WebsiteSearchTool
-from src.agents.tools import search_tool, stock_price_tool
+from src.agents.tools import search_tool, stock_price_tool, web_tool, tavily_finance_tool
 from src.agents.llm import research_llm, boss_llm
 
 # --- TOOLS ---
 # These allow  agents to research real-time market data
-search_tool = SerperDevTool()
-web_tool = WebsiteSearchTool()
-
 @CrewBase
 class MarketWarRoom():
     """MarketPulse CrewAI War Room for Event Analysis"""
@@ -32,7 +28,7 @@ class MarketWarRoom():
     def quantitative_forensicist(self) -> Agent:
         return Agent(
             config=self.agents_config['quantitative_forensicist'],
-            tools=[stock_price_tool], # Only needs the hard numbers
+            tools=[stock_price_tool, tavily_finance_tool], # Only needs the hard numbers
             llm=research_llm,
             verbose=True
         )
@@ -41,7 +37,7 @@ class MarketWarRoom():
     def sentiment_architect(self) -> Agent:
         return Agent(
             config=self.agents_config['sentiment_architect'],
-            tools=[search_tool, web_tool],
+            tools=[search_tool, web_tool, tavily_finance_tool],
             llm=research_llm,
             verbose=True
         )

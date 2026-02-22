@@ -1,4 +1,4 @@
-from crewai_tools import SerperDevTool, WebsiteSearchTool
+from crewai_tools import SerperDevTool, WebsiteSearchTool, tool, TavilySearchTool
 import yfinance as yf
 
 # 1. Search Tool: Restrict to high-signal financial domains
@@ -26,7 +26,11 @@ web_tool = WebsiteSearchTool(
     }
 )
 
-from crewai_tools import tool
+tavily_finance_tool = TavilySearchTool(
+    search_depth="basic",
+    topic="finance",         # Filters results specifically for financial data
+    max_results=3            # Keeps token costs low
+)
 
 @tool("stock_price_tool")
 def stock_price_tool(ticker: str):

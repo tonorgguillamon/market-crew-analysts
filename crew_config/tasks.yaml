@@ -1,0 +1,45 @@
+# 1. PEER: Macro Strategist
+macro_analysis_task:
+  description: >
+    Analyze the {event} through a global lens. Determine if this is a 
+    systemic shift or an isolated incident. Evaluate the impact on 
+    interest rates, the Dollar Index (DXY), and sector rotations.
+  expected_output: "A summary of the global economic backdrop and systemic risk."
+  agent: macro_strategist
+
+# 2. PEER: Quantitative Forensicist
+quantitative_audit_task:
+  description: >
+    Audit the raw data behind {event}. Use tools to find volume spikes, 
+    historical volatility clusters, and liquidity gaps. Identify if 
+    the move is driven by 'Smart Money' or retail panic.
+  expected_output: "A technical data sheet with volume analysis and price levels."
+  agent: quantitative_forensicist
+
+# 3. PEER: Sentiment Architect
+sentiment_mapping_task:
+  description: >
+    Map the human reaction to {event}. Scour news headlines and social 
+    sentiment to see if the crowd is diverging from the fundamentals. 
+    Is this a 'Fear of Missing Out' or a 'Panic Sell'?
+  expected_output: "A narrative report on current market fear/greed levels."
+  agent: sentiment_architect
+
+# 4. PEER: Sector Specialist
+industry_impact_task:
+  description: >
+    Identify the specific tickers impacted by {event}. Map the ripple 
+    effect across the supply chain and direct competitors. Who wins 
+    and who loses in this specific industry niche?
+  expected_output: "A table of winners and losers within the affected sector."
+  agent: sector_specialist
+
+# 5. THE INTERNAL ORCHESTRATOR: Chief Risk Officer
+final_risk_verdict_task:
+  description: >
+    Review all the reports provided by the Macro, Quant, Sentiment, and 
+    Sector analysts. Synthesize their findings, resolve any contradictions, 
+    and provide the final official 'Go/No-Go' trade recommendation. 
+    Challenge the team's assumptions and highlight the worst-case scenario.
+  expected_output: "A definitive, high-confidence investment strategy and risk-mitigation plan."
+  agent: chief_risk_officer

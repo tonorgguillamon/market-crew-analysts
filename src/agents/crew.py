@@ -9,7 +9,7 @@ from src.agents.llm import research_llm, boss_llm
 class MarketWarRoom():
     """MarketPulse CrewAI War Room for Event Analysis"""
 
-    # Path to your YAML configurations
+    # Path to  YAML configurations
     agents_config = 'crew_config/agents.yaml'
     tasks_config = 'crew_config/tasks.yaml'
 

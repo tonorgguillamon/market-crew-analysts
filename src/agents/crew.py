@@ -1,6 +1,6 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from src.agents.tools import search_tool, stock_price_tool, web_tool, tavily_finance_tool
+from src.agents.tools import search_tool, stock_price_tool, webscraper_tool, trusted_finance_search
 from src.agents.llm import research_llm, boss_llm
 
 # --- TOOLS ---
@@ -10,7 +10,7 @@ class MarketWarRoom():
     """MarketPulse CrewAI War Room for Event Analysis"""
 
     # Path to  YAML configurations
-    agents_config = 'crew_config/agents.yaml'
+    agents_config = 'crew_config/roles.yaml'
     tasks_config = 'crew_config/tasks.yaml'
 
     # --- AGENTS (The Peers) ---
@@ -28,7 +28,7 @@ class MarketWarRoom():
     def quantitative_forensicist(self) -> Agent:
         return Agent(
             config=self.agents_config['quantitative_forensicist'],
-            tools=[stock_price_tool, tavily_finance_tool], # Only needs the hard numbers
+            tools=[stock_price_tool, trusted_finance_search], # Only needs the hard numbers
             llm=research_llm,
             verbose=True
         )
@@ -37,7 +37,7 @@ class MarketWarRoom():
     def sentiment_architect(self) -> Agent:
         return Agent(
             config=self.agents_config['sentiment_architect'],
-            tools=[search_tool, web_tool, tavily_finance_tool],
+            tools=[search_tool, webscraper_tool, trusted_finance_search],
             llm=research_llm,
             verbose=True
         )
@@ -46,7 +46,7 @@ class MarketWarRoom():
     def sector_specialist(self) -> Agent:
         return Agent(
             config=self.agents_config['sector_specialist'],
-            tools=[search_tool, web_tool],
+            tools=[search_tool, webscraper_tool],
             llm=research_llm,
             verbose=True
         )
@@ -60,6 +60,7 @@ class MarketWarRoom():
             tools=[search_tool],
             llm=boss_llm,
             verbose=True,
+            max_iter=3, # stop after 3 iterations of feedback -> we don't want it to iterates forever
             allow_delegation=True # Allows the boss to ask peers for more info
         )
 
@@ -67,6 +68,7 @@ class MarketWarRoom():
 
     @task
     def macro_task(self) -> Task:
+        print(self.tasks_config)
         return Task(
             config=self.tasks_config['macro_analysis_task'],
             async_execution=True
@@ -118,6 +120,7 @@ class MarketWarRoom():
             process=Process.sequential, # The 'context' handles the peer logic -> don't allow the boss to skip agents/tasks
             # Max 5 requests per minute to stay safe on lower API tiers
             max_rpm=5,
+            cache=True, # prevent from searching the same information over and over
             verbose=True
         )
     

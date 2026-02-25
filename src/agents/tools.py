@@ -1,20 +1,15 @@
-from crewai_tools import SerperDevTool, WebsiteSearchTool, tool, TavilySearchTool
+from crewai_tools import SerperDevTool, WebsiteSearchTool, TavilySearchTool, ScrapeWebsiteTool
+from crewai.tools import tool
 import yfinance as yf
 
 # 1. Search Tool: Restrict to high-signal financial domains
 search_tool = SerperDevTool(
-    config={
-        "engine": "google",
-        "params": {
-            "num": 5,
-            # We add a site operator to the search query behind the scenes
-            "q": "site:bloomberg.com OR site:reuters.com OR site:cnbc.com OR site:wsj.com"
-        }
-    }
+    n_results=5
 )
 
 # 2. Website Search: Tailor it for specific deep-dives
 # This tool allows agents to "crawl" a specific page if they find a good link.
+"""
 web_tool = WebsiteSearchTool(
     config={
         "options": {
@@ -25,11 +20,21 @@ web_tool = WebsiteSearchTool(
         }
     }
 )
+"""
 
-tavily_finance_tool = TavilySearchTool(
+webscraper_tool = ScrapeWebsiteTool()
+
+trusted_finance_search = TavilySearchTool(
+    include_domains=[
+        "bloomberg.com", 
+        "reuters.com", 
+        "cnbc.com", 
+        "wsj.com",
+        "finance.yahoo.com",
+        "investing.com"
+    ],
     search_depth="basic",
-    topic="finance",         # Filters results specifically for financial data
-    max_results=3            # Keeps token costs low
+    topic="finance"
 )
 
 @tool("stock_price_tool")

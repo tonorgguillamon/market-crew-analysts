@@ -1,5 +1,10 @@
+from dotenv import load_dotenv
+
+load_dotenv()
+
 import asyncio
 from src.agents.crew import MarketWarRoom
+
 
 async def test_war_room():
     print("🚀 Initializing Market War Room Test...")
@@ -13,6 +18,7 @@ async def test_war_room():
     # 2. Initialize the Crew
     # We use the class we built in crew.py
     market_crew = MarketWarRoom().crew()
+    market_crew.clear_cache() # Wipes the slate clean for the new trading day
 
     print(f"🧐 Analyzing Event: {mock_inputs['event']}")
     print("-" * 30)

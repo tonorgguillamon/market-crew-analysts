@@ -14,6 +14,8 @@ The system is built on a high-concurrency, asynchronous pipeline:
 
 ---
 
+![diagram](docs/crewai_design.png)
+
 ## 🚀 Key Features
 
 -   **Persona-Diverse Analysis**: Simultaneously get high-risk, balanced, and defensive perspectives on market movers.

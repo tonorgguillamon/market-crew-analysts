@@ -8,8 +8,8 @@ mq_manager = RabbitMQManager()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # STARTUP
-    mq_manager.connect()
-    mq_manager.setup_infrastructure()
+    await mq_manager.connect()
+    await mq_manager.setup_infrastructure()
     
     # Attach to app state so it's globally accessible
     app.state.mq = mq_manager
@@ -17,7 +17,7 @@ async def lifespan(app: FastAPI):
     yield # App is running
     
     # SHUTDOWN
-    mq_manager.close()
+    await mq_manager.close()
 
 app = FastAPI(lifespan=lifespan, title="Api Producer")
 

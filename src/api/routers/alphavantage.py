@@ -21,9 +21,6 @@ async def handle_alphavantage(request: Request, alert: AlphaVantageAlert):
     }
     
     # Publish with a specific routing key
-    mq.publish_event(
-        routing_key=f"market.alphavantage.alert",
-        payload=payload
-    )
+    await mq.publish_event(routing_key="market.alphavantage.alert", payload=payload)
     
     return {"message": "Event queued for analysis"}

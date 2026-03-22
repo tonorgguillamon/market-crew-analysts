@@ -52,8 +52,7 @@ class MarketWarRoom():
         )
 
     # --- THE INTERNAL BOSS ---
-
-    @agent
+    # don't use @agent since this agent is in a higher level of hierarchy
     def chief_risk_officer(self) -> Agent:
         return Agent(
             config=self.agents_config['chief_risk_officer'],
@@ -70,29 +69,26 @@ class MarketWarRoom():
     def macro_task(self) -> Task:
         print(self.tasks_config)
         return Task(
-            config=self.tasks_config['macro_analysis_task'],
-            async_execution=True
+            config=self.tasks_config['macro_analysis_task']
+            # async_execution=True -> not needed if process is hierarchical
         )
 
     @task
     def quant_task(self) -> Task:
         return Task(
-            config=self.tasks_config['quantitative_audit_task'],
-            async_execution=True
+            config=self.tasks_config['quantitative_audit_task']
         )
 
     @task
     def sentiment_task(self) -> Task:
         return Task(
-            config=self.tasks_config['sentiment_mapping_task'],
-            async_execution=True
+            config=self.tasks_config['sentiment_mapping_task']
         )
 
     @task
     def sector_task(self) -> Task:
         return Task(
-            config=self.tasks_config['industry_impact_task'],
-            async_execution=True
+            config=self.tasks_config['industry_impact_task']
         )
 
     @task
@@ -117,7 +113,8 @@ class MarketWarRoom():
         return Crew(
             agents=self.agents, # Automatically pulls all @agent functions
             tasks=self.tasks,   # Automatically pulls all @task functions
-            process=Process.sequential, # The 'context' handles the peer logic -> don't allow the boss to skip agents/tasks
+            process=Process.hierarchical, # CRO delegates to peers
+            manager_agent=self.chief_risk_officer(), # CRO becomes the orchestrator
             # Max 5 requests per minute to stay safe on lower API tiers
             max_rpm=5,
             cache=True, # prevent from searching the same information over and over
